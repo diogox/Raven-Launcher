@@ -1,0 +1,11 @@
+pub const ACTION_LIST: &str = "ActionListAction";
+pub const COPY_TO_CLIPBOARD_ACTION: &str = "CopyToClipboardAction";
+pub const DO_NOTHING_ACTION: &str = "DoNothingAction";
+pub const EXTENSION_CUSTOM_ACTION: &str = "ExtensionCustomAction";
+pub const HIDE_WINDOW_ACTION: &str = "HideWindowAction";
+pub const LAUNCH_WINDOW_ACTION: &str = "LaunchAppAction";
+pub const OPEN_URL_ACTION: &str = "OpenUrlAction";
+pub const OPEN_ACTION: &str = "OpenAction";
+pub const RENDER_RESULT_LIST_ACTION: &str = "RenderResultListAction";
+pub const RUN_SCRIPT_ACTION: &str = "RunScriptAction";
+pub const SET_USER_QUERY_ACTION: &str = "SetUserQueryAction";
