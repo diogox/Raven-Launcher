@@ -2,7 +2,7 @@
 // extension makers can't call `run()` or `keep_app_open()` 
 pub mod base_action;
 
-mod constants;
+pub mod constants;
 
 #[macro_use]
 pub mod action_list;

@@ -1,4 +1,10 @@
-pub trait BaseAction {
+use std::fmt::Debug;
+use serde_traitobject::{
+    Serialize,
+    Deserialize,
+};
+
+pub trait BaseAction: Debug + Serialize + Deserialize {
 
     /// `true` if Raven's window should 
     /// remain open once all actions are 
