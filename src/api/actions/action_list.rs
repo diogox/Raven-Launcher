@@ -1,3 +1,10 @@
+// Here I opted for savng the list of actions as
+// a Vec<String> because it allows me to ignore the
+// Box<TraitName> hell. Because `ActionList` is always 
+// meant to be used in communication between server 
+// and client, doing so is not an issue because the 
+// actions would have to be serialized either way.
+
 use serde;
 use serde_json;
 
