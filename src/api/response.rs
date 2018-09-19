@@ -16,9 +16,10 @@ use super::events::base_event::BaseEvent;
 use super::actions::base_action::BaseAction;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Response {
-    event: String,
-    action: String,
+pub struct Response {
+    pub event: String,
+    pub action: String,
+    pub extension_id: u32,
 }
 
 impl<'de> Response {
@@ -31,6 +32,7 @@ impl<'de> Response {
         Response {
             event: serde_json::to_string(&event).unwrap(),
             action: serde_json::to_string(&action).unwrap(),
+            extension_id: 0, // TODO
         }
     }
 }

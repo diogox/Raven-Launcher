@@ -1,3 +1,4 @@
+#[derive(Serialize, Deserialize, Debug)]
 pub struct KeywordQueryEvent {
     query: String, // TODO: Change this with a 'Query' struct
 }
