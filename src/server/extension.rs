@@ -6,6 +6,7 @@ use ::api::response::Response;
 use super::IdType;
 use super::extension_controller::ExtensionController;
 use super::extensions::EXTENSIONS;
+use super::manifest::ExtensionManifest;
 
 #[derive(TypedBuilder)]
 pub struct Extension {
@@ -41,6 +42,12 @@ pub struct Extension {
     /// to be assigned on a different thread.
     #[default]
     controller: RefCell<Option<ExtensionController>>,
+
+    /// The extension's developer defined manifest.
+    /// It holds some configurations and defines what
+    /// preferences the use can set.
+    #[default]
+    manifest: Option<ExtensionManifest>,
 }
 
 impl Extension {
@@ -49,6 +56,7 @@ impl Extension {
     pub fn id(&self) -> IdType { self.id }
     pub fn keyword(&self) -> &str { &self.keyword }
     pub fn exec_path(&self) -> &str { &self.exec_path }
+    pub fn manifest(&self) -> &Option<ExtensionManifest> { &self.manifest }
 
     // Setters
     pub fn set_controller(&self, controller: ExtensionController) {
@@ -64,6 +72,15 @@ impl Extension {
         if self.process_handler.is_some() {
             return Err( () )
         }
+
+        // Is the manifest valid?
+        match self.validate_manifest() {
+            Ok(manifest) => {
+                self.manifest = Some(manifest);
+            },
+            Err(_) => println!("MANIFEST INVALID")
+        }
+
         
         // Start it
         let process_handler = Command::new(&self.exec_path)
@@ -118,5 +135,36 @@ impl Extension {
             .remove(&self.id);
 
         Ok( () )
+    }
+
+    // TODO: Refactor/Clean-up code
+    fn validate_manifest(&self) -> Result<ExtensionManifest, ()> {
+        use std::path::PathBuf;
+        use std::fs::File;
+        use std::io::Read;
+        
+        // Get extension directory
+        let mut extension_dir = PathBuf::new();
+        extension_dir.push(self.exec_path.clone());
+        extension_dir.pop();
+        extension_dir.push("manifest.json");
+
+        // Open manifest file
+        let mut manifest_file = File::open(extension_dir)
+            .expect("file not found");
+
+        // Read manifest
+        let mut manifest = String::new();
+        manifest_file.read_to_string(&mut manifest)
+            .expect("something went wrong reading the file");
+
+        // Deserialize manifest
+        if let Ok(manifest) = serde_json::from_str(&manifest) {
+            let manifest: ExtensionManifest = manifest;
+            println!("{:?}", manifest);
+            return Ok( manifest );
+        } else {
+            return Err( () );
+        }
     }
 }
