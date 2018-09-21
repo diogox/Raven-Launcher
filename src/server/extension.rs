@@ -161,7 +161,11 @@ impl Extension {
         // Deserialize manifest
         if let Ok(manifest) = serde_json::from_str(&manifest) {
             let manifest: ExtensionManifest = manifest;
-            println!("{:?}", manifest);
+            
+            // Check manifest fields
+            ExtensionManifest::validate(&manifest)
+                .expect("Manifest not valid!");
+
             return Ok( manifest );
         } else {
             return Err( () );

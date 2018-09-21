@@ -30,7 +30,7 @@ impl OpenAction {
     /// Allows you to define the path
     /// of the file or directory to be
     /// opened.
-    pub fn path(&mut self, path: &str) {
+    pub fn set_path(&mut self, path: &str) {
 
         self.file_path = path.to_owned();
     }

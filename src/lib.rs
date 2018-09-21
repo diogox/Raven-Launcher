@@ -18,3 +18,5 @@ extern crate port_scanner;
 pub mod api;
 pub mod client;
 pub mod server;
+pub mod search;
+pub mod ui;

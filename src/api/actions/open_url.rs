@@ -26,7 +26,7 @@ impl OpenUrlAction {
     }
 
     /// Allows you to define the url to open.
-    pub fn url(&mut self, url: &str) {
+    pub fn set_url(&mut self, url: &str) {
 
         self.url = url.to_owned();
     }

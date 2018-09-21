@@ -29,7 +29,7 @@ impl LaunchAppAction {
     /// Allows you to define the name
     /// of the .desktop file to be
     /// launched.
-    pub fn filename(&mut self, name: &str) {
+    pub fn set_filename(&mut self, name: &str) {
         self.filename = name.to_owned();
     }
 }

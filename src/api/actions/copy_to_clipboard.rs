@@ -27,7 +27,7 @@ impl CopyToClipboardAction {
 
     /// Allows you to define the text
     /// to be copied to the clipboard.
-    pub fn text(&mut self, text: &str) {
+    pub fn set_text(&mut self, text: &str) {
         self.text = text.to_owned();
     }
 }

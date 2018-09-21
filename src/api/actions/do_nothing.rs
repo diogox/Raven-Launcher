@@ -17,8 +17,8 @@ impl DoNothingAction {
         }
     }
 
-    pub fn hide_app(&mut self, hide: bool) {
-        self.hide_app = hide;
+    pub fn should_hide_app(&mut self, should_hide: bool) {
+        self.hide_app = should_hide;
     }
 }
 

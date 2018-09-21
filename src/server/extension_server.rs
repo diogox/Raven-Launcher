@@ -106,4 +106,20 @@ impl ExtensionServer {
                 .expect("Could not start Extension!"); // TODO: Handle error
         }
     }
+
+    pub fn get_extension_id_by_keyword(&self, kw: &str) -> Option<IdType> {
+        
+        // Get extensions hashmap
+        let extensions = EXTENSIONS.lock()
+            .unwrap();
+
+        // For every extension check keyword match
+        for (_id, extension) in extensions.iter() {
+            if extension.keyword() == kw {
+                return Some(extension.id());
+            }
+        }
+
+        None
+    }
 }

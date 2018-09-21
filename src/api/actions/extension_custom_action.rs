@@ -39,7 +39,7 @@ impl<'de> ExtensionCustomAction {
         }
     }
 
-    pub fn data(&mut self, data: impl Serialize + Deserialize<'de>) {
+    pub fn set_data(&mut self, data: impl Serialize + Deserialize<'de>) {
         self.data = serde_json::to_string(&data).ok();
     }
 

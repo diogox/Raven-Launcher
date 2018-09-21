@@ -28,7 +28,7 @@ impl SetUserQueryAction {
 
     /// Allows you to define the 
     /// new query to be set.
-    pub fn query(&mut self, query: &str) {
+    pub fn set_query(&mut self, query: &str) {
         self.new_query = query.to_owned();
     }
 }

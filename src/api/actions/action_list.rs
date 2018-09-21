@@ -41,7 +41,7 @@ impl ActionList {
 
     /// Allows you to define the 
     /// actions to be executed.
-    pub fn actions(&mut self, actions: Vec<String>) {
+    pub fn set_actions(&mut self, actions: Vec<String>) {
         self.actions = actions;
     }
 
