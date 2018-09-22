@@ -14,15 +14,15 @@ pub trait BaseSearchMode {
     fn is_enabled(&self, _query: &str) -> bool { false }
 
     /// Triggered when user changes a search query.
-    fn on_query(&self, query: &str);
+    fn on_query(&mut self, query: &str);
  
     // TODO: Make this take a 'GuiItem' trait object
     // or closure that performs an action on the GUI
     fn handle_key_press_event(&self, _query: &str)
         -> Box<BaseAction> { Box::new(DoNothingAction::new()) }
 
-    fn handle_query(&self, _query: &str) -> Box<BaseAction> { 
-        Box::new(DoNothingAction::new()) 
+    fn handle_query(&self, _query: &str) -> Box<dyn BaseAction> { 
+        Box::new(DoNothingAction::new()) as Box<BaseAction> 
     }
 
     /// Returns a list of default result items 

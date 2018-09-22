@@ -108,7 +108,7 @@ impl Extension {
         // TODO: Handle error
         self.controller
             .borrow_mut()
-            .clone() // ! Rust...
+            .as_mut()
             .unwrap()
             .send(&message);
     }

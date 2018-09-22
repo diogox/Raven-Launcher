@@ -1,6 +1,12 @@
+use std::fmt::Debug;
+use serde_traitobject::{
+    Serialize,
+    Deserialize,
+};
+
 use ::api::actions::base_action::BaseAction;
 
-pub trait ResultItem {
+pub trait ResultItem: Debug + Serialize + Deserialize {
 
     fn keyword(&self) -> Option<String> { None }
     fn name(&self) -> Option<String> { None }

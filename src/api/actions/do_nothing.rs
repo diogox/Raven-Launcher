@@ -27,7 +27,7 @@ impl BaseAction for DoNothingAction {
 
     fn keep_app_open(&self) -> bool { self.hide_app }
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
         // Does Nothing
         Ok( () )
     }

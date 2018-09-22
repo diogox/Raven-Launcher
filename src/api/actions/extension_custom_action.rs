@@ -59,7 +59,7 @@ impl BaseAction for ExtensionCustomAction {
 
     fn keep_app_open(&self) -> bool { self.keep_app_open }
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
 
         // ? Is this usable?
         // `data` is supposed to be sent to `onItemEnter` Event. How?

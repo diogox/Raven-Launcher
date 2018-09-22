@@ -36,7 +36,7 @@ impl OpenUrlAction {
 use super::base_action::BaseAction;
 impl BaseAction for OpenUrlAction {
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
         use webbrowser;
 
         // TODO: Use correct Err type here!

@@ -36,7 +36,7 @@ impl CopyToClipboardAction {
 use super::base_action::BaseAction;
 impl BaseAction for CopyToClipboardAction {
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

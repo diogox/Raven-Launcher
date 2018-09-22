@@ -36,7 +36,7 @@ impl ItemEnterEvent {
         if self.data.is_none() {
             return None;
         }
-        let data_json = self.data.clone().unwrap();
+        let data_json = self.data.as_ref().unwrap();
         let data: Option<T> = serde_json::from_str(&data_json).ok();
         data
     }

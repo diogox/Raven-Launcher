@@ -79,10 +79,10 @@ impl BaseAction for ActionList {
         self.keep_app_open
     }
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
         use super::*;
 
-        for action_json in self.actions {
+        for action_json in self.actions.iter() {
 
             // Find action type
             let value: serde_json::Value = serde_json::from_str(&action_json).unwrap();

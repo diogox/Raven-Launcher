@@ -1,11 +1,11 @@
 use ::server::extension_server::ExtensionServer;
+use ::server::deferred_result_renderer::DeferredResultRenderer;
 use super::base_search_mode::BaseSearchMode;
 use super::query::Query;
 
 pub struct ExtensionSearchMode {
     server: ExtensionServer,
-    //deferred_result_renderer: DeferredResultRenderer,
-    // ! Should have instance of DeferredResultRenderer!!!
+    deferred_result_renderer: DeferredResultRenderer,
 }
 
 impl ExtensionSearchMode {
@@ -14,10 +14,12 @@ impl ExtensionSearchMode {
 
         let mut server = ExtensionServer::new();
         server.start();
+        
+        let deferred_result_renderer = DeferredResultRenderer::new();
 
         ExtensionSearchMode {
             server,
-            //deferred_result_renderer,
+            deferred_result_renderer,
         }
     }
 }
@@ -51,12 +53,11 @@ impl BaseSearchMode for ExtensionSearchMode {
     }
 
     /// Triggered when user changes a search query.
-    fn on_query(&self, _query: &str) {
-        //self.deferred_result_renderer.on_query_change() // !
-        unimplemented!();
+    fn on_query(&mut self, _query: &str) {
+        self.deferred_result_renderer.on_query_change();
     }
 
-    fn handle_query(&self, query: &str) -> Box<BaseAction> { 
+    fn handle_query(&self, query: &str) -> Box<dyn BaseAction> { 
         let query = String::from(query);
         let extension = self.server.get_extension_id_by_keyword(query.get_keyword().unwrap());
         if extension.is_none() {
@@ -64,7 +65,7 @@ impl BaseSearchMode for ExtensionSearchMode {
         }
 
         // TODO: extension.handle_query(&query)
-        Box::new(DoNothingAction::new()) // ! PLACEHOLDER
+        Box::new(DoNothingAction::new()) as Box<BaseAction> // ! PLACEHOLDER
     }
 
     fn get_searchable_items(&self) -> Vec<Box<ResultItem>> {

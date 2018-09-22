@@ -16,5 +16,5 @@ pub trait BaseAction: Debug + Serialize + Deserialize {
 
     /// Runs the action
     // TODO: Create Error type for this.
-    fn run(self) -> Result<(), ()>;
+    fn run(&self) -> Result<(), ()>;
 }

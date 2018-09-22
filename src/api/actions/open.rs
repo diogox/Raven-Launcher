@@ -40,7 +40,7 @@ impl OpenAction {
 use super::base_action::BaseAction;
 impl BaseAction for OpenAction {
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

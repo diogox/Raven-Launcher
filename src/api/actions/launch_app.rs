@@ -38,7 +38,7 @@ impl LaunchAppAction {
 use super::base_action::BaseAction;
 impl BaseAction for LaunchAppAction {
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

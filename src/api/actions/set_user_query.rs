@@ -41,7 +41,7 @@ impl BaseAction for SetUserQueryAction {
     // the new query can be processed. 
     fn keep_app_open(&self) -> bool { true }
 
-    fn run(self) -> Result<(), ()> {
+    fn run(&self) -> Result<(), ()> {
         unimplemented!();
     }
 }

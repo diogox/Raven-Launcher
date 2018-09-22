@@ -22,7 +22,7 @@ impl HideWindowAction {
 use super::base_action::BaseAction;
 impl BaseAction for HideWindowAction {
 
-    fn run(self) -> Result<(), ()> { 
+    fn run(&self) -> Result<(), ()> { 
         // Does Nothing 
         Ok( () )
     }
