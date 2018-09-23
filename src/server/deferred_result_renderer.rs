@@ -3,36 +3,40 @@ use timer::{
     Guard,
 };
 
+use ::ui::launcher_gui::LauncherGUI;
 use ::api::response::Response;
 use ::api::events::base_event::BaseEvent;
 use ::api::actions::do_nothing::DoNothingAction;
 use super::extension::Extension;
+use super::IdType;
 
 /// Handles asynchronous render for extensions
 pub struct DeferredResultRenderer {
     timer: Timer,
     loading: Option<Guard>,
     active_event: Option< Box<dyn BaseEvent> >,
-    active_extension: Option<Extension>,
+    active_extension: Option<IdType>,
+    launcher_gui: Box<LauncherGUI>,
 }
 
 impl DeferredResultRenderer {
 
-    pub fn new() -> Self {
+    pub fn new(launcher_gui: Box<LauncherGUI +'static>) -> Self {
 
         DeferredResultRenderer {
             timer: Timer::new(),
             loading: None,
             active_event: None,
             active_extension: None,
+            launcher_gui,
         }
     }
 
-    pub fn active_extension(&self) -> &Option<Extension> {
-        &self.active_extension
+    pub fn active_extension(&self) -> Option<IdType> {
+        self.active_extension
     }
 
-    pub fn handle_event(&mut self, event: impl BaseEvent + 'static, extension: Extension) -> DoNothingAction {
+    pub fn handle_event(&mut self, event: impl BaseEvent + 'static, extension_id: IdType) -> DoNothingAction {
         use chrono::Duration;
 
         // Cancel timer if it's running
@@ -50,18 +54,22 @@ impl DeferredResultRenderer {
 
         // Keep active values
         self.active_event = Some(Box::new(event));
-        self.active_extension = Some(extension);
+        self.active_extension = Some(extension_id);
 
         DoNothingAction::new()
     }
 
-    pub fn handle_response(&mut self, response: Response, extension: Extension) {
+    pub fn handle_response(&mut self, response: Response, extension_id: IdType) {
         use ::api::actions::base_action::BaseAction;
 
         // Check if it's the same extension or event
         {
-            let active_extension = self.active_extension.as_mut().unwrap();
-            if active_extension.id() != extension.id()
+            // ! For testing purposes
+            self.active_extension = Some(extension_id);
+
+            let active_extension = self.active_extension.as_mut()
+                .expect("Could not unwrap current active extension in result renderer!");
+            if *active_extension != extension_id
                 //|| self.active_event.unwrap() != response.event.unwrap()  // ! Implement 'PartialEq' on Response
             {
                 return;
@@ -79,7 +87,8 @@ impl DeferredResultRenderer {
         action.run().unwrap();
 
         if !keep_app_open {
-            // TODO: Hide window and clear input
+            self.launcher_gui.hide_app();
+            self.launcher_gui.clear_input();
         }
     }
 

@@ -1,6 +1,6 @@
 pub type IdType = usize;
 
-mod extensions;
+pub mod extensions;
 mod extension;
 mod manifest;
 pub mod extension_controller;

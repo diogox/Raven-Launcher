@@ -1,3 +1,9 @@
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
+use ::server::deferred_result_renderer::DeferredResultRenderer;
 use super::base_search_mode::BaseSearchMode;
 use super::extension_search_mode::ExtensionSearchMode;
 
@@ -7,10 +13,10 @@ pub struct Search  {
 
 impl Search {
 
-    pub fn new() -> Self {
+    pub fn new(result_renderer: Arc< Mutex<DeferredResultRenderer> >) -> Self {
 
         // Initialize search modes
-        let extension_search_mode = ExtensionSearchMode::new();
+        let extension_search_mode = ExtensionSearchMode::new(result_renderer);
         // TODO: Add other search modes
 
         let mut search_modes = Vec::new();

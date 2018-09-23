@@ -93,6 +93,7 @@ impl Extension {
         self.process_handler = Some(process_handler);
 
         // Add self to list of running extensions
+        println!("Inserting Extension(id: {})", self.id);
         EXTENSIONS.lock()
             .unwrap()
             .insert(self.id, self);

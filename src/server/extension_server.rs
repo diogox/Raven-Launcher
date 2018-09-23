@@ -1,4 +1,8 @@
 use std::thread;
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use ws::listen;
 
 use ::api::response::Response;
@@ -7,6 +11,7 @@ use super::{
     extension::Extension,
     extensions::EXTENSIONS,
     extension_controller::ExtensionController,
+    deferred_result_renderer::DeferredResultRenderer,
 };
 
 pub struct ExtensionServer {
@@ -14,11 +19,12 @@ pub struct ExtensionServer {
     port: u16,
     extensions_dir: String,
     extensions: Vec<String>, // TODO: Change type & USE THIS
+    deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >,
 }
 
 impl ExtensionServer {
 
-    pub fn new() -> Self {
+    pub fn new(deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >) -> Self {
         use port_scanner::request_open_port;
 
         ExtensionServer {
@@ -26,6 +32,7 @@ impl ExtensionServer {
             port: request_open_port().expect("Could not find open port!"), // TODO: Find available port programatically
             extensions_dir: "./target/debug/examples/".to_owned(),
             extensions: vec!("client".to_owned()),
+            deferred_result_renderer,
         }
     }
 
@@ -34,12 +41,17 @@ impl ExtensionServer {
         // Generate endpoint
         let ws_endpoint = self.generate_ws_endpoint();
         
+        // Get reference to deferred_result_renderer to move it to the thread
+        let result_renderer = Arc::clone(&self.deferred_result_renderer);
+    
         // Start thread
         thread::spawn(move || {
 
             // Block thread and listen for connections
-			listen(ws_endpoint, ExtensionController::new)
-                .expect("Could not start WS server!");
+			listen(ws_endpoint, |out| {
+                
+                ExtensionController::new(out, Arc::clone(&result_renderer))
+            }).expect("Could not start WS server!");
 		});
 
         // Start Extensions

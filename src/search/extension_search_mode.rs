@@ -1,21 +1,26 @@
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
 use ::server::extension_server::ExtensionServer;
 use ::server::deferred_result_renderer::DeferredResultRenderer;
+use ::server::extensions::EXTENSIONS;
+
 use super::base_search_mode::BaseSearchMode;
 use super::query::Query;
 
 pub struct ExtensionSearchMode {
     server: ExtensionServer,
-    deferred_result_renderer: DeferredResultRenderer,
+    deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >,
 }
 
 impl ExtensionSearchMode {
 
-    pub fn new() -> Self {
+    pub fn new(deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >) -> Self {
 
-        let mut server = ExtensionServer::new();
+        let mut server = ExtensionServer::new(Arc::clone(&deferred_result_renderer));
         server.start();
-        
-        let deferred_result_renderer = DeferredResultRenderer::new();
 
         ExtensionSearchMode {
             server,
@@ -23,7 +28,6 @@ impl ExtensionSearchMode {
         }
     }
 }
-
 
 use ::api::actions::{
     base_action::BaseAction,
@@ -54,7 +58,9 @@ impl BaseSearchMode for ExtensionSearchMode {
 
     /// Triggered when user changes a search query.
     fn on_query(&mut self, _query: &str) {
-        self.deferred_result_renderer.on_query_change();
+        self.deferred_result_renderer.lock()
+            .unwrap()
+            .on_query_change();
     }
 
     fn handle_query(&self, query: &str) -> Box<dyn BaseAction> { 
@@ -64,7 +70,15 @@ impl BaseSearchMode for ExtensionSearchMode {
             panic!("Extension not found to handle the query!");
         }
 
-        // TODO: extension.handle_query(&query)
+        // TODO: Create handle_query() in 'Extension' struct?
+        /*        
+        EXTENSIONS.lock()
+            .unwrap()
+            .get(&extension.unwrap())
+            .unwrap()
+            .handle_query(&query);
+        */
+
         Box::new(DoNothingAction::new()) as Box<BaseAction> // ! PLACEHOLDER
     }
 

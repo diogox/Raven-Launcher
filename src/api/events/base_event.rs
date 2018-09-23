@@ -1,1 +1,1 @@
-pub trait BaseEvent {}
+pub trait BaseEvent: Send {}

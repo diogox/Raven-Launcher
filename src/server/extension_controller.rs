@@ -1,3 +1,8 @@
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
 use serde_json;
 use ws::{
     Sender,
@@ -6,20 +11,23 @@ use ws::{
 };
 
 use ::api::response::Response;
+use super::deferred_result_renderer::DeferredResultRenderer;
 use super::IdType;
 
 #[derive(Clone)]
 pub struct ExtensionController {
     extension_id: Option<IdType>,
     ws: Sender,
+    deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >,
 }
 
 impl ExtensionController {
 
-    pub fn new(ws: Sender) -> Self {
+    pub fn new(ws: Sender, deferred_result_renderer: Arc< Mutex<DeferredResultRenderer> >) -> Self {
         ExtensionController {
             extension_id: None,
             ws,
+            deferred_result_renderer,
         }
     }
 
@@ -54,10 +62,11 @@ impl Handler for ExtensionController {
         // Add extension id and controller (self) to the list
         // TODO: Handle Errors
         let extensions = EXTENSIONS.lock()
-            .unwrap();
+            .expect("Could not lock extension 'on_open'");
 
+        println!("Received 'on_open' from extension id: {}", &self.extension_id.unwrap());
         let extension = extensions.get(&self.extension_id.unwrap())
-            .unwrap();
+            .expect("Could not get id from 'on_open'");
         extension.set_controller(self.clone());
 
         Ok( () )
@@ -75,12 +84,17 @@ impl Handler for ExtensionController {
         // Get sender of the message
         let msg_sender = res.extension_id as IdType;
 
+        // ? Is it needed to check ID? Sender is unique to the client, right?
         // Ignore message if not extension controller of that id
         let extension_id = self.extension_id.unwrap();
         if extension_id == msg_sender {
 
-            // TODO: Implement logic to handle message here
             println!("Token: {:?} -> {:?}", extension_id, res.action);
+
+            // Handle response
+            self.deferred_result_renderer.lock()
+                .expect("Could not get lock on result renderer!")
+                .handle_response(res, extension_id);
         }
         
         Ok( () )
