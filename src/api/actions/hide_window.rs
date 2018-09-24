@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::HIDE_WINDOW_ACTION;
 
 /// Hides the app. 
@@ -19,10 +22,14 @@ impl HideWindowAction {
     }
 }
 
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for HideWindowAction {
 
-    fn run(&self) -> Result<(), ()> { 
+    fn run(self, _sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> { 
         // Does Nothing 
         Ok( () )
     }

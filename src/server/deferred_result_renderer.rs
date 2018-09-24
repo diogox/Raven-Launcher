@@ -1,13 +1,17 @@
+use std::sync::{
+    Arc,
+    Mutex,
+};
+use relm_core::Sender;
 use timer::{
     Timer,
     Guard,
 };
 
-use ::ui::launcher_gui::LauncherGUI;
+use ::ui::launcher_msg::LauncherMsg;
 use ::api::response::Response;
 use ::api::events::base_event::BaseEvent;
 use ::api::actions::do_nothing::DoNothingAction;
-use super::extension::Extension;
 use super::IdType;
 
 /// Handles asynchronous render for extensions
@@ -16,12 +20,12 @@ pub struct DeferredResultRenderer {
     loading: Option<Guard>,
     active_event: Option< Box<dyn BaseEvent> >,
     active_extension: Option<IdType>,
-    launcher_gui: Box<LauncherGUI>,
+    pub launcher_gui: Arc<Mutex<Sender<LauncherMsg>>>,
 }
 
 impl DeferredResultRenderer {
 
-    pub fn new(launcher_gui: Box<LauncherGUI +'static>) -> Self {
+    pub fn new(launcher_gui: Arc< Mutex<Sender<LauncherMsg>> >) -> Self {
 
         DeferredResultRenderer {
             timer: Timer::new(),
@@ -84,11 +88,13 @@ impl DeferredResultRenderer {
         // ! TODO: Implement something to allow downcasting
         let action: DoNothingAction = serde_json::from_str(&response.action).unwrap();
         let keep_app_open = action.keep_app_open();
-        action.run().unwrap();
+        action.run(&self.launcher_gui).unwrap();
 
         if !keep_app_open {
-            self.launcher_gui.hide_app();
-            self.launcher_gui.clear_input();
+            let controller = self.launcher_gui.lock()
+                .unwrap();
+            controller.send(LauncherMsg::Hide).unwrap();
+            controller.send(LauncherMsg::ClearInput).unwrap();
         }
     }
 
@@ -122,6 +128,6 @@ impl DeferredResultRenderer {
 
         let mut render = RenderResultListAction::new();
         render.push(loading_item);
-        render.run().unwrap();
+        render.run(&self.launcher_gui).unwrap();
     }
 }

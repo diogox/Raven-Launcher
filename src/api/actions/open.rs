@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::OPEN_ACTION;
 
 /// Run platform a specific 
@@ -36,11 +39,14 @@ impl OpenAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for OpenAction {
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

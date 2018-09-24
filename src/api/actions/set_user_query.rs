@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::SET_USER_QUERY_ACTION;
 
 /// Changes query string to a 
@@ -33,7 +36,10 @@ impl SetUserQueryAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for SetUserQueryAction {
 
@@ -41,7 +47,7 @@ impl BaseAction for SetUserQueryAction {
     // the new query can be processed. 
     fn keep_app_open(&self) -> bool { true }
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
         unimplemented!();
     }
 }

@@ -5,9 +5,16 @@
 // and client, doing so is not an issue because the 
 // actions would have to be serialized either way.
 
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
 use serde;
 use serde_json;
+use relm_core::Sender;
 
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants;
 
 /// Used to run multiple
@@ -65,10 +72,10 @@ impl ActionList {
 
 
 macro_rules! deserialize_and_execute_if (
-    ($struct_name:ident, $action_json:expr) => ({
+    ($struct_name:ident, $action_json:expr, $sender: expr) => ({
             let action: $struct_name = serde_json::from_str(&$action_json)
                 .unwrap();
-            action.run()?;
+            action.run($sender)?;
     })
 );
 
@@ -79,7 +86,7 @@ impl BaseAction for ActionList {
         self.keep_app_open
     }
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
         use super::*;
 
         for action_json in self.actions.iter() {
@@ -89,17 +96,17 @@ impl BaseAction for ActionList {
             
             // Deserialize action
             match value.get("action").unwrap().as_str().unwrap() {
-                constants::ACTION_LIST => deserialize_and_execute_if!(ActionList, action_json),
-                constants::COPY_TO_CLIPBOARD_ACTION => deserialize_and_execute_if!(CopyToClipboardAction, action_json),
-                constants::DO_NOTHING_ACTION => deserialize_and_execute_if!(DoNothingAction, action_json),
-                constants::EXTENSION_CUSTOM_ACTION => deserialize_and_execute_if!(ExtensionCustomAction, action_json),
-                constants::HIDE_WINDOW_ACTION => deserialize_and_execute_if!(HideWindowAction, action_json),
-                constants::LAUNCH_WINDOW_ACTION => deserialize_and_execute_if!(LaunchAppAction, action_json),
-                constants::OPEN_URL_ACTION => deserialize_and_execute_if!(OpenUrlAction, action_json),
-                constants::OPEN_ACTION => deserialize_and_execute_if!(OpenAction, action_json),
-                constants::RENDER_RESULT_LIST_ACTION => deserialize_and_execute_if!(RenderResultListAction, action_json),
+                constants::ACTION_LIST => deserialize_and_execute_if!(ActionList, action_json, sender),
+                constants::COPY_TO_CLIPBOARD_ACTION => deserialize_and_execute_if!(CopyToClipboardAction, action_json, sender),
+                constants::DO_NOTHING_ACTION => deserialize_and_execute_if!(DoNothingAction, action_json, sender),
+                constants::EXTENSION_CUSTOM_ACTION => deserialize_and_execute_if!(ExtensionCustomAction, action_json, sender),
+                constants::HIDE_WINDOW_ACTION => deserialize_and_execute_if!(HideWindowAction, action_json, sender),
+                constants::LAUNCH_WINDOW_ACTION => deserialize_and_execute_if!(LaunchAppAction, action_json, sender),
+                constants::OPEN_URL_ACTION => deserialize_and_execute_if!(OpenUrlAction, action_json, sender),
+                constants::OPEN_ACTION => deserialize_and_execute_if!(OpenAction, action_json, sender),
+                constants::RENDER_RESULT_LIST_ACTION => deserialize_and_execute_if!(RenderResultListAction, action_json, sender),
                 //constants::RUN_SCRIPT_ACTION => deserialize_and_execute_if!(RunScriptAction, action_json),
-                constants::SET_USER_QUERY_ACTION => deserialize_and_execute_if!(SetUserQueryAction, action_json),
+                constants::SET_USER_QUERY_ACTION => deserialize_and_execute_if!(SetUserQueryAction, action_json, sender),
                 _ => {}
             }
         }

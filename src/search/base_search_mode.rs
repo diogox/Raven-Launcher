@@ -1,6 +1,6 @@
 type PLACEHOLDER = String;
 
-// ! Might have to change the 'query' types from &str to a Query struct.
+use downcast_rs::Downcast;
 
 use ::api::actions::{
     base_action::BaseAction,
@@ -8,7 +8,7 @@ use ::api::actions::{
 };
 use ::api::items::result_item::ResultItem;
 
-pub trait BaseSearchMode {
+pub trait BaseSearchMode: Downcast {
 
     /// Return True if mode should be enabled for a query.
     fn is_enabled(&self, _query: &str) -> bool { false }
@@ -34,3 +34,5 @@ pub trait BaseSearchMode {
     /// can be looked up by name or keyword.
     fn get_searchable_items(&self) -> Vec<Box<ResultItem>> { Vec::new() }
 }
+
+impl_downcast!(BaseSearchMode);

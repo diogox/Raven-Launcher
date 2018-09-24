@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use ::api::items::ExtensionResultItem;
 use super::constants::RENDER_RESULT_LIST_ACTION;
 
@@ -28,14 +31,21 @@ impl RenderResultListAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for RenderResultListAction {
 
     fn keep_app_open(&self) -> bool { true }
 
-    fn run(&self) -> Result<(), ()> {
-        // TODO: Make this display to ui
-        unimplemented!();
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
+        sender.lock()
+            .unwrap()
+            .send(LauncherMsg::ShowResults(self.result_list))
+            .unwrap();
+
+        Ok( () )
     }
 }

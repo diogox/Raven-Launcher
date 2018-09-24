@@ -2,12 +2,20 @@
 #![allow(dead_code)]
 
 #[macro_use]
+extern crate relm;
+#[macro_use]
+extern crate relm_derive;
+#[macro_use]
 extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate typed_builder;
+#[macro_use]
+extern crate downcast_rs;
 
+extern crate gtk;
+extern crate relm_core;
 extern crate serde;
 extern crate serde_json;
 extern crate serde_traitobject;
@@ -22,3 +30,10 @@ pub mod client;
 pub mod server;
 pub mod search;
 pub mod ui;
+
+use relm::Widget;
+
+fn main() {
+    ui::launcher_window::Win::run(())
+        .expect("Win::run failed");
+}

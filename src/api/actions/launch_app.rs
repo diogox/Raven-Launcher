@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::LAUNCH_WINDOW_ACTION;
 
 /// Launches an app by the
@@ -34,11 +37,14 @@ impl LaunchAppAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for LaunchAppAction {
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::DO_NOTHING_ACTION;
 
 /// Does nothing.
@@ -22,12 +25,16 @@ impl DoNothingAction {
     }
 }
 
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for DoNothingAction {
 
     fn keep_app_open(&self) -> bool { self.hide_app }
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, _sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
         // Does Nothing
         Ok( () )
     }

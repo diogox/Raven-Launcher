@@ -1,0 +1,156 @@
+/*@import url("./reset.css");*/
+
+/*
+@define-color bg_color #F2F2F2;
+@define-color window_shadow rgba(0, 0, 0, 0.5);
+@define-color window_bg @bg_color;
+@define-color window_border_color #b1b1b1;
+@define-color prefs_backgroud #ccc;
+
+@define-color selected_bg_color #999;
+@define-color selected_fg_color #fafafa;
+@define-color input_color #555;
+@define-color caret_color lighter(@input_color);
+
+@define-color item_name #333;
+@define-color item_text lighter(@item_name);
+@define-color item_box_selected #D6D6D6;
+@define-color item_text_selected darker(@item_text);
+@define-color item_name_selected @item_name;
+@define-color item_shortcut_color #777;
+@define-color item_shortcut_shadow #fff;
+@define-color item_shortcut_color_sel #444;
+@define-color item_shortcut_shadow_sel lighter(@item_box_selected);
+*/
+
+* {
+    color: inherit;
+    font-size: inherit;
+    background-color: initial;
+    font-family: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-weight: inherit;
+    text-shadow: inherit;
+    -icon-shadow: inherit;
+    box-shadow: initial;
+    margin-top: initial;
+    margin-bottom: initial;
+    padding-top: initial;
+    padding-left: initial;
+    padding-bottom: initial;
+    padding-right: initial;
+    border-top-style: initial;
+    border-top-width: initial;
+    border-left-style: initial;
+    border-left-width: initial;
+    border-bottom-style: initial;
+    border-bottom-width: initial;
+    border-right-style: initial;
+    border-right-width: initial;
+    border-top-left-radius: initial;
+    border-top-right-radius: initial;
+    border-bottom-right-radius: initial;
+    border-bottom-left-radius: initial;
+    outline-style: initial;
+    outline-width: initial;
+    outline-offset: initial;
+    background-clip: initial;
+    background-origin: initial;
+    background-size: initial;
+    background-position: initial;
+    border-top-color: initial;
+    border-right-color: initial;
+    border-bottom-color: initial;
+    border-left-color: initial;
+    outline-color:  initial;
+    background-repeat: initial;
+    background-image: initial;
+    border-image-source: initial;
+    border-image-repeat: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    transition-property: initial;
+    transition-duration: initial;
+    transition-timing-function: initial;
+    transition-delay: initial;
+  }
+  
+
+.app {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    background-color: #F2F2F2;
+    border: 1px solid #b1b1b1;
+    border-radius: 4px;
+}
+
+
+.input {
+    color: #555;
+    font-size: 170%;
+    padding: 5px 0 5px 7px;
+}
+
+.input *:selected,
+.input *:focus,
+*:selected:focus {
+    background-color: alpha (   #999, 0.9);
+    color: #fafafa;
+}
+.item-text {
+    color: #919191;
+}
+
+.item-name {
+    color: #333;
+    font-size: 120%;
+}
+
+.selected.item-box {
+    background-color: #D6D6D6;
+    border-left: 1px solid #b1b1b1;
+    border-right: 1px solid #b1b1b1;
+}
+
+.selected.item-box .item-text {
+    color: #333;
+}
+.selected.item-box .item-name {
+    color: #333;
+}
+
+.item-shortcut {
+    color: #777;
+    text-shadow: 1px 1px 1px #fff;
+}
+
+
+.selected.item-box .item-shortcut {
+    color: #444;
+    text-shadow: 1px 1px 1px #919191;
+}
+
+.item-descr {
+    font-size: 80%;
+}
+
+.small-result-item .item-name {
+    font-size: 100%;
+}
+
+.prefs-btn {
+    border-radius: 12px;
+    opacity: 0.8;
+    background: url("./prefs.svg") center no-repeat;
+}
+.prefs-btn:hover {
+    background-color: #ccc;
+}
+
+.input {
+    caret-color: #808080;
+}
+.selected.item-box {
+    /* workaround for a bug in GTK+ < 3.20 */
+    border: none;
+}

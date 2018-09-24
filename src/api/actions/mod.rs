@@ -1,5 +1,5 @@
 // TODO: This is should be `pub(crate)` so that
-// extension makers can't call `run()` or `keep_app_open()` 
+// extension makers can't call `run()` or `keep_app_open()`
 pub mod base_action;
 
 pub mod constants;

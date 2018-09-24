@@ -5,7 +5,6 @@ use std::sync::{
 
 use ::server::extension_server::ExtensionServer;
 use ::server::deferred_result_renderer::DeferredResultRenderer;
-use ::server::extensions::EXTENSIONS;
 
 use super::base_search_mode::BaseSearchMode;
 use super::query::Query;

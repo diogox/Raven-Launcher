@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::EXTENSION_CUSTOM_ACTION;
 
 use serde_json;
@@ -53,13 +56,16 @@ impl<'de> ExtensionCustomAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for ExtensionCustomAction {
 
     fn keep_app_open(&self) -> bool { self.keep_app_open }
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
 
         // ? Is this usable?
         // `data` is supposed to be sent to `onItemEnter` Event. How?

@@ -6,7 +6,7 @@ use serde_traitobject::{
 
 use ::api::actions::base_action::BaseAction;
 
-pub trait ResultItem: Debug + Serialize + Deserialize {
+pub trait ResultItem: Debug + Serialize + Deserialize + Send {
 
     fn keyword(&self) -> Option<String> { None }
     fn name(&self) -> Option<String> { None }

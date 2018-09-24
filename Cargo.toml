@@ -15,3 +15,15 @@ typed-builder = "0.1.1"
 port_scanner = "0.1.5"
 timer = "0.2.0"
 chrono = "0.4.6"
+relm-derive = "^0.14.0"
+relm-attributes = "^0.14.0"
+relm-core = "0.14.6"
+downcast-rs = "1.0.3"
+
+[dependencies.relm]
+version = "^0.14.0"
+default-features = false
+
+[dependencies.gtk]
+version = "^0.4"
+features = ["v3_10"]

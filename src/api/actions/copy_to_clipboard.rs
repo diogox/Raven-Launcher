@@ -1,3 +1,10 @@
+use std::sync::{
+    Arc,
+    Mutex,
+};
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::COPY_TO_CLIPBOARD_ACTION;
 
 /// Copy text to the clipboard.
@@ -36,7 +43,7 @@ impl CopyToClipboardAction {
 use super::base_action::BaseAction;
 impl BaseAction for CopyToClipboardAction {
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
 
         // TODO!!
         unimplemented!();

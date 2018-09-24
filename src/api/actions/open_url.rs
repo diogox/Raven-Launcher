@@ -1,3 +1,6 @@
+use relm_core::Sender;
+
+use ::ui::launcher_msg::LauncherMsg;
 use super::constants::OPEN_URL_ACTION;
 
 /// Opens URL in the default browser
@@ -32,11 +35,14 @@ impl OpenUrlAction {
     }
 }
 
-
+use std::sync::{
+    Arc,
+    Mutex,
+};
 use super::base_action::BaseAction;
 impl BaseAction for OpenUrlAction {
 
-    fn run(&self) -> Result<(), ()> {
+    fn run(self, sender: &Arc< Mutex<Sender<LauncherMsg>> >) -> Result<(), ()> {
         use webbrowser;
 
         // TODO: Use correct Err type here!
