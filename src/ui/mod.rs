@@ -1,4 +1,4 @@
-mod model;
-pub mod launcher_msg;
-pub mod launcher;
-pub mod launcher_window;
+mod utils;
+mod navigation;
+pub mod windows;
+pub mod result_item;

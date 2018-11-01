@@ -14,7 +14,7 @@ use serde;
 use serde_json;
 use relm_core::Sender;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use super::constants;
 
 /// Used to run multiple

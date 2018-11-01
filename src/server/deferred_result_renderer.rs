@@ -1,6 +1,7 @@
 use std::sync::{
     Arc,
     Mutex,
+    mpsc,
 };
 use relm_core::Sender;
 use timer::{
@@ -8,7 +9,7 @@ use timer::{
     Guard,
 };
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use ::api::response::Response;
 use ::api::events::base_event::BaseEvent;
 use ::api::actions::do_nothing::DoNothingAction;
@@ -94,7 +95,7 @@ impl DeferredResultRenderer {
             let controller = self.launcher_gui.lock()
                 .unwrap();
             controller.send(LauncherMsg::Hide).unwrap();
-            controller.send(LauncherMsg::ClearInput).unwrap();
+            controller.send(LauncherMsg::NavClearResults).unwrap();
         }
     }
 

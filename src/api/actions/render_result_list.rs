@@ -1,6 +1,6 @@
 use relm_core::Sender;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use ::api::items::ExtensionResultItem;
 use super::constants::RENDER_RESULT_LIST_ACTION;
 
@@ -23,6 +23,14 @@ impl RenderResultListAction {
         RenderResultListAction {
             action: RENDER_RESULT_LIST_ACTION.to_string(),
             result_list: Vec::new(),
+        }
+    }
+
+    pub fn with_list(result_list: Vec<ExtensionResultItem>) -> Self {
+
+        RenderResultListAction {
+            action: RENDER_RESULT_LIST_ACTION.to_string(),
+            result_list,
         }
     }
 

@@ -8,7 +8,7 @@ use ::api::actions::{
 };
 use ::api::items::result_item::ResultItem;
 
-pub trait BaseSearchMode: Downcast {
+pub trait BaseSearchMode: Downcast + Send {
 
     /// Return True if mode should be enabled for a query.
     fn is_enabled(&self, _query: &str) -> bool { false }
@@ -22,6 +22,7 @@ pub trait BaseSearchMode: Downcast {
         -> Box<BaseAction> { Box::new(DoNothingAction::new()) }
 
     fn handle_query(&self, _query: &str) -> Box<dyn BaseAction> { 
+        println!("This is the base_search_mode being called!");
         Box::new(DoNothingAction::new()) as Box<BaseAction> 
     }
 

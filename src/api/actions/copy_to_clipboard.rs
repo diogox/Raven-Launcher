@@ -4,7 +4,7 @@ use std::sync::{
 };
 use relm_core::Sender;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use super::constants::COPY_TO_CLIPBOARD_ACTION;
 
 /// Copy text to the clipboard.

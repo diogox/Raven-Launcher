@@ -3,12 +3,12 @@ use std::sync::{
     Mutex,
 };
 use relm_core::Sender;
-use downcast_rs::Downcast;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use ::server::deferred_result_renderer::DeferredResultRenderer;
 use super::base_search_mode::BaseSearchMode;
 use super::extension_search_mode::ExtensionSearchMode;
+use super::app_search_mode::AppSearchMode;
 
 pub struct Search  {
     search_modes: Vec< Box<dyn BaseSearchMode> >,
@@ -22,11 +22,13 @@ impl Search {
         let gui_controller = Arc::clone(&result_renderer.lock().unwrap().launcher_gui);
 
         // Initialize search modes
-        let extension_search_mode = ExtensionSearchMode::new(result_renderer);
+        //let extension_search_mode = ExtensionSearchMode::new(result_renderer);
+        let app_search_mode = AppSearchMode::new();
         // TODO: Add other search modes
 
         let mut search_modes = Vec::new();
-        search_modes.push(Box::new(extension_search_mode) as Box<BaseSearchMode>);
+        //search_modes.push(Box::new(extension_search_mode) as Box<BaseSearchMode>);
+        search_modes.push(Box::new(app_search_mode) as Box<BaseSearchMode>);
 
         Search {
             search_modes,

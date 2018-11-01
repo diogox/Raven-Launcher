@@ -1,6 +1,6 @@
 use relm_core::Sender;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 use super::constants::LAUNCH_WINDOW_ACTION;
 
 /// Launches an app by the

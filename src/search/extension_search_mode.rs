@@ -57,6 +57,7 @@ impl BaseSearchMode for ExtensionSearchMode {
 
     /// Triggered when user changes a search query.
     fn on_query(&mut self, _query: &str) {
+        println!("Calling ExtensionSearchModes 'on_query'");
         self.deferred_result_renderer.lock()
             .unwrap()
             .on_query_change();
@@ -70,14 +71,15 @@ impl BaseSearchMode for ExtensionSearchMode {
         }
 
         // TODO: Create handle_query() in 'Extension' struct?
-        /*        
+        /*
+        use ::server::extensions::EXTENSIONS;     
         EXTENSIONS.lock()
             .unwrap()
             .get(&extension.unwrap())
             .unwrap()
             .handle_query(&query);
         */
-
+        
         Box::new(DoNothingAction::new()) as Box<BaseAction> // ! PLACEHOLDER
     }
 

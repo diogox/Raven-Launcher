@@ -10,7 +10,7 @@ use serde_traitobject::{
 use relm_core::Sender;
 use downcast_rs::Downcast;
 
-use ::ui::launcher_msg::LauncherMsg;
+use ::ui::windows::launcher::msg::Msg as LauncherMsg;
 
 pub trait BaseAction: Debug + Serialize + Deserialize + Send + Downcast {
 

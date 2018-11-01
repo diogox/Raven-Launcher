@@ -24,6 +24,10 @@ extern crate ws;
 extern crate port_scanner;
 extern crate timer;
 extern crate chrono;
+extern crate rusqlite;
+extern crate gio;
+extern crate relm_attributes;
+extern crate gdk;
 
 pub mod api;
 pub mod client;
@@ -34,6 +38,6 @@ pub mod ui;
 use relm::Widget;
 
 fn main() {
-    ui::launcher_window::Win::run(())
+    ui::windows::launcher::LauncherWindow::run(())
         .expect("Win::run failed");
 }
