@@ -61,7 +61,7 @@ impl Widget for LauncherWindow {
         // Adjust the look of the entry.
         let style_context = self.launcher.get_style_context().unwrap();
         // TODO: remove the next line when relm supports css.
-        let style = include_bytes!("ui/windows/launcher/theme.css");
+        let style = include_bytes!("theme.css");
         let provider = CssProvider::new();
         provider.load_from_data(style).unwrap();
 
