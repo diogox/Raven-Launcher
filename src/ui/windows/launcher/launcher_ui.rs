@@ -1,3 +1,6 @@
+use std::cell::RefCell;
+use std::sync::Mutex;
+
 use gdk::{
     ScreenExt,
     DisplayExt,
@@ -28,6 +31,15 @@ use relm::{
 };
 use relm_attributes::widget;
 
+use bindkey::{
+	HotKey,
+	CallbackStorage,
+	Modifier,
+	TriggerOn,
+};
+
+use fragile::Fragile;
+
 use super::super::super::navigation::nav_msg::NavMsg;
 use super::super::super::utils::WindowUtils;
 use super::super::super::result_item::ResultItem;
@@ -37,6 +49,12 @@ use super::{
     msg::Msg,
     model::Model,
 };
+
+lazy_static! {
+    static ref WINDOW: Mutex< RefCell< relm_core::EventStream<Msg> > > = {
+        Mutex::new( RefCell::new( relm_core::EventStream::new() ) )
+    };
+}
 
 #[widget]
 impl Widget for LauncherWindow {
@@ -68,10 +86,6 @@ impl Widget for LauncherWindow {
         // Apparently, adding the styles to the current Widget only doesn't work
         // We must add the styles to the whole app by adding a provider to the screen.
         StyleContext::add_provider_for_screen(&style_context.get_screen().unwrap(), &provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        /* Bind Hotkey */
-        // TODO: How???
-
     }
 
     fn model(relm: &Relm<Self>, _: ()) -> Model {
@@ -124,12 +138,38 @@ impl Widget for LauncherWindow {
         let search = rx.recv()
             .unwrap();
 
-        Model {
+        let model = Model {
             relm: relm.clone(),
             is_window_showing: true,
             _channel: channel,
             search,
-        }
+        };
+
+        /* Bind Hotkey */
+
+        // Set Relm stream
+        WINDOW.lock()
+            .unwrap()
+            .replace( relm.stream().clone() );
+
+        let key = HotKey::new(
+            0x0020,
+            vec!(Modifier::Ctrl), 
+            TriggerOn::Press
+        );
+
+        let mut storage = CallbackStorage::new();
+        storage.add(&key, || {
+            let window = WINDOW.lock()
+                .unwrap();
+            
+            window.borrow()
+                .emit(Msg::Toggle);
+        });
+
+        bindkey::start_async(storage);
+
+        model
     }
 
     fn toggle_window(&self) {
@@ -183,11 +223,11 @@ impl Widget for LauncherWindow {
             },
             Msg::Toggle => {
                 if self.model.is_window_showing {
-                    // TODO: Hide
-                    println!("HIDE");
+                    self.launcher.hide();
+                    self.model.is_window_showing = false;
                 } else {
-                    // TODO: Show
-                    println!("SHOW");
+                    self.launcher.show();
+                    self.model.is_window_showing = true;
                 }
             },
             Msg::Quit => gtk::main_quit(),
