@@ -38,8 +38,6 @@ use bindkey::{
 	TriggerOn,
 };
 
-use fragile::Fragile;
-
 use super::super::super::navigation::nav_msg::NavMsg;
 use super::super::super::utils::WindowUtils;
 use super::super::super::result_item::ResultItem;

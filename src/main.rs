@@ -29,7 +29,6 @@ extern crate gio;
 extern crate relm_attributes;
 extern crate gdk;
 extern crate bindkey;
-extern crate fragile;
 
 pub mod api;
 pub mod client;

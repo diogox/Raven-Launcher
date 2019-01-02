@@ -22,7 +22,6 @@ downcast-rs = "1.0.3"
 rusqlite = "0.14.0"
 gio = "0.4.1"
 bindkey = "0.2.0"
-fragile = "0.3.0"
 
 [dependencies.gdk]
 version = "0.8.0"
